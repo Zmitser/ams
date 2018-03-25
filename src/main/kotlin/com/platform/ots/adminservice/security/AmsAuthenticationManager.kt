@@ -19,7 +19,9 @@ class AmsAuthenticationManager(private var passwordEncoder: PasswordEncoder,
                 .filter { it is AmsWebAuthenticationToken }
                 .flatMap { userDetailsService.findByUsername(it.principal.toString()) }
                 .switchIfEmpty(error(BadCredentialsException("Bad credentials")))
-                .filter { passwordEncoder.matches(authentication.credentials.toString(), it.password) }
+                .filter {
+                    passwordEncoder.matches(authentication.credentials.toString(), it.password)
+                }
                 .map { UsernamePasswordAuthenticationToken(it.username, it.password, it.authorities) }
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder.AUTHENTICATION
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter
@@ -30,7 +31,7 @@ class SecurityModuleConfiguration(val corsFilter: CorsFilter,
 
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder = CustomPasswordEncoder()
+    fun passwordEncoder(): PasswordEncoder = BcryptPasswordEncoderWrapper(BCryptPasswordEncoder())
 
     @Bean
     fun authenticationManager(passwordEncoder: PasswordEncoder) = AmsAuthenticationManager(passwordEncoder, userDetailsService)
