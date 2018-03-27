@@ -95,8 +95,7 @@ dependencies {
     compile("com.hazelcast:hazelcast")
     compile("com.hazelcast:hazelcast-hibernate52")
     compile("com.hazelcast:hazelcast-spring")
-    compile group: 'org.zalando', name: 'problem', version: '0.20.1'
-    compile group: 'org.zalando', name: 'jackson-datatype-problem', version: '0.20.1'
+    compile "org.zalando:problem-spring-web:0.22.2"
     compile("p6spy:p6spy:3.0.0")
     kapt("org.mapstruct:mapstruct-processor:1.2.0.Final")
     compile("com.h2database:h2:1.4.196")

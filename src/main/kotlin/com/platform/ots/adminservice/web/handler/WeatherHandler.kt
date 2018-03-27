@@ -1,4 +1,4 @@
-package com.platform.ots.adminservice.handler
+package com.platform.ots.adminservice.web.handler
 
 import com.codahale.metrics.annotation.Timed
 import com.platform.ots.adminservice.strategy.WeatherService

@@ -1,6 +1,6 @@
-package com.platform.ots.adminservice.router
+package com.platform.ots.adminservice.web.router
 
-import com.platform.ots.adminservice.handler.UserHandler
+import com.platform.ots.adminservice.web.handler.UserHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType.APPLICATION_JSON

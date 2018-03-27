@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.zalando.problem.ProblemModule
+import org.zalando.problem.validation.ConstraintViolationProblemModule
 
 @Configuration
 class JacksonModuleConfiguration {
@@ -27,7 +28,11 @@ class JacksonModuleConfiguration {
      * Module for serialization/deserialization of RFC7807 Problem.
      */
     @Bean
-    fun problemModule(): ProblemModule = ProblemModule()
+    fun problemModule(): ProblemModule = ProblemModule().withStackTraces()
+
+    @Bean
+    fun constraintViolationProblemModule(): ConstraintViolationProblemModule = ConstraintViolationProblemModule()
+
 
     /*
      * Module for Kotlin support.

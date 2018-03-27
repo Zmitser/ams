@@ -1,5 +1,6 @@
 package com.platform.ots.adminservice.security
 
+import com.platform.ots.adminservice.web.error.IncorrectPasswordException
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -21,7 +22,9 @@ class AmsAuthenticationManager(private var passwordEncoder: PasswordEncoder,
                 .switchIfEmpty(error(BadCredentialsException("Bad credentials")))
                 .filter {
                     passwordEncoder.matches(authentication.credentials.toString(), it.password)
+                }.switchIfEmpty(error(IncorrectPasswordException("Incorrect password")))
+                .map {
+                    UsernamePasswordAuthenticationToken(it.username, it.password, it.authorities)
                 }
-                .map { UsernamePasswordAuthenticationToken(it.username, it.password, it.authorities) }
     }
 }

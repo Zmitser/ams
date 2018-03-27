@@ -1,10 +1,12 @@
-package com.platform.ots.adminservice.handler
+package com.platform.ots.adminservice.web.handler
 
 import com.platform.ots.adminservice.security.AmsTokenProvider
+import com.platform.ots.adminservice.security.AmsWebAuthenticationToken
 import com.platform.ots.adminservice.security.DomainUserDetailsService
 import com.platform.ots.adminservice.web.response.AmsWebAuthenticationTokenRequest
 import com.platform.ots.adminservice.web.response.AmsWebAuthenticationTokenResponse
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
@@ -17,13 +19,17 @@ import reactor.core.publisher.toMono
 
 @Component
 class AuthHandler(val tokenProvider: AmsTokenProvider,
-                  val userDetailsService: DomainUserDetailsService) {
+                  val userDetailsService: DomainUserDetailsService,
+                  val authenticationManager: ReactiveAuthenticationManager) {
 
 
     fun createToken(serverRequest: ServerRequest): Mono<ServerResponse> {
         return serverRequest.bodyToMono(AmsWebAuthenticationTokenRequest::class.java)
                 .flatMap {
-                    userDetailsService.findByUsername(it.username)
+                    authenticationManager.authenticate(AmsWebAuthenticationToken(it.username, it.password))
+                }
+                .flatMap {
+                    userDetailsService.findByUsername(it.principal.toString())
                 }
                 .flatMap {
                     status(CREATED).body(AmsWebAuthenticationTokenResponse(it.username, createToken(it)).toMono())

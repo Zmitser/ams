@@ -1,4 +1,4 @@
-package com.platform.ots.adminservice.handler
+package com.platform.ots.adminservice.web.handler
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext

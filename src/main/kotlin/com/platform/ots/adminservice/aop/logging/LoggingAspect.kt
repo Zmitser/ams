@@ -17,8 +17,8 @@ class LoggingAspect(val environment: Environment) {
 
     private val log = KotlinLogging.logger {}
 
-    @Pointcut("within(com.platform.ots.adminservice.handler..*) || " +
-            "within(com.platform.ots.adminservice.router..*) || " +
+    @Pointcut("within(com.platform.ots.adminservice.web.handler..*) || " +
+            "within(com.platform.ots.adminservice.web.router..*) || " +
             "within(com.platform.ots.adminservice.repository..*) " +
             "within(com.platform.ots.adminservice.web.service..*)")
     fun applicationPackagePointCut() {

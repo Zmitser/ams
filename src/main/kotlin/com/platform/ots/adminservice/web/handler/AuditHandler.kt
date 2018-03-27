@@ -1,4 +1,4 @@
-package com.platform.ots.adminservice.handler
+package com.platform.ots.adminservice.web.handler
 
 import com.platform.ots.adminservice.web.service.AuditEventService
 import org.springframework.data.domain.Sort
