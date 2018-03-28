@@ -38,5 +38,5 @@ class AuthHandler(val tokenProvider: AmsTokenProvider,
     }
 
     private fun createToken(it: UserDetails) =
-            tokenProvider.createToken(UsernamePasswordAuthenticationToken(it.username, it.password), true)
+            tokenProvider.createToken(UsernamePasswordAuthenticationToken(it.username, it.password))
 }

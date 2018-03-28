@@ -23,6 +23,9 @@ import {ToastModule, ToastOptions} from "ng2-toastr";
 import {HttpModule} from "@angular/http";
 import {WeatherService} from "./layout/weather/weather.service";
 import {WeatherServiceEffects} from "./store/effects/weather-service-effects";
+import {AsyncLocalStorageModule} from "angular-async-local-storage";
+import {JWT_OPTIONS, JwtModule} from "@auth0/angular-jwt";
+import {AuthService} from "./shared/services/auth.service";
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -33,6 +36,14 @@ export class CustomOption extends ToastOptions {
     animate = 'flyRight';
     showCloseButton = true;
     positionClass = 'toast-bottom-right'
+}
+
+export function jwtOptionsFactory(tokenService: AuthService) {
+    return {
+        tokenGetter: () => {
+            return tokenService.getToken();
+        }
+    }
 }
 
 @NgModule({
@@ -62,10 +73,22 @@ export class CustomOption extends ToastOptions {
             stateKey: 'router'
         }),
         StoreDevtoolsModule.instrument(),
-        HttpModule
+        HttpModule,
+        AsyncLocalStorageModule,
+        JwtModule.forRoot({
+            jwtOptionsProvider: {
+                provide: JWT_OPTIONS,
+                useFactory: jwtOptionsFactory,
+                deps: [AuthService]
+            }
+        })
     ],
     declarations: [AppComponent],
-    providers: [AuthGuard, UserService, WeatherService,
+    providers: [
+        AuthGuard,
+        UserService,
+        WeatherService,
+        AuthService,
         {
             provide: RouterStateSerializer,
             useClass: CustomSerializer

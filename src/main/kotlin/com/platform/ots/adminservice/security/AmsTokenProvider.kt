@@ -45,10 +45,10 @@ class AmsTokenProvider(
     }
 
 
-    fun createToken(authentication: Authentication, rememberMe: Boolean): String? {
+    fun createToken(authentication: Authentication): String? {
         val authorities: String = authentication.authorities.joinToString(",")
         val now: Long = currentTimeMillis()
-        val validity: Long = calculateExpirationDate(rememberMe, now)
+        val validity: Long = calculateExpirationDate(now)
         return builder()
                 .claim(Constants.AUTHORITIES_KEY, authorities)
                 .signWith(HS512, secretKey)
@@ -59,9 +59,9 @@ class AmsTokenProvider(
 
     }
 
-    fun refreshToken(token: String, rememberMe: Boolean): String {
+    fun refreshToken(token: String): String {
         val now: Long = currentTimeMillis()
-        val expirationDate = calculateExpirationDate(rememberMe, now)
+        val expirationDate = calculateExpirationDate(now)
         val claims = getClaims(token)
         claims.issuedAt = Date(now)
         claims.expiration = Date(expirationDate)
@@ -71,12 +71,8 @@ class AmsTokenProvider(
                 .compact()
     }
 
-    private fun calculateExpirationDate(rememberMe: Boolean, now: Long): Long {
-        return when {
-            rememberMe -> now + SECONDS.toMillis(tokenExpirationWithRememberMe)
-            else -> now + SECONDS.toMillis(tokenExpirationWithoutRememberMe)
-        }
-    }
+    private fun calculateExpirationDate(now: Long): Long = now + SECONDS.toMillis(tokenExpirationWithRememberMe)
+
 
     fun getAuthentication(token: String): Authentication {
         val claims: Claims = getClaims(token)
