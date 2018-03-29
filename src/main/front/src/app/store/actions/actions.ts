@@ -2,8 +2,10 @@ import {Action} from "@ngrx/store";
 import {User} from "../../shared/models/user";
 import {NavigationExtras} from "@angular/router";
 import {ServerDataSource} from "ng2-smart-table";
-import {Weather} from "../../shared/models/weather";
+import {Credentials, Weather} from "../../shared";
 
+export const LOGIN_USER_ACTION = 'LOGIN_USER_ACTION';
+export const LOGIN_USER_ACTION_SUCCESS = 'LOGIN_USER_ACTION_SUCCESS';
 export const LOAD_USERS_ACTION = 'LOAD_USERS_ACTION';
 export const LOAD_USERS_ACTION_SUCCESS = "LOAD_USERS_ACTION_SUCCESS";
 export const CREATE_USERS_DATA_SOURCE = "CREATE_USERS_DATA_SOURCE";
@@ -144,13 +146,28 @@ export class LoadWeatherAction implements Action {
 
 
 export class LoadWeatherActionSuccess implements ActionWithPayload<Map<string, Weather[]>> {
-
     type: string = LOAD_WEATHER_ACTION_SUCCESS;
 
     constructor(public payload: Map<string, Weather[]>) {
 
     }
+}
 
+
+export class LoginUserAction implements ActionWithPayload<Credentials> {
+    type: string = LOGIN_USER_ACTION;
+
+    constructor(public payload: Credentials) {
+
+    }
+}
+
+export class LoginUserActionSuccess implements ActionWithPayload<boolean> {
+    type: string = LOGIN_USER_ACTION;
+
+    constructor(public payload: boolean) {
+
+    }
 }
 
 export class Go implements Action {

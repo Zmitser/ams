@@ -26,6 +26,8 @@ import {WeatherServiceEffects} from "./store/effects/weather-service-effects";
 import {AsyncLocalStorageModule} from "angular-async-local-storage";
 import {JWT_OPTIONS, JwtModule} from "@auth0/angular-jwt";
 import {AuthService} from "./shared/services/auth.service";
+import {LoginServiceEffects} from "./store/effects/login-service-effects";
+import {LoginService} from "./login/login.service";
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -67,7 +69,8 @@ export function jwtOptionsFactory(tokenService: AuthService) {
         EffectsModule.forRoot([
             UserServiceEffects,
             WeatherServiceEffects,
-            RouterServiceEffects
+            RouterServiceEffects,
+            LoginServiceEffects,
         ]),
         StoreRouterConnectingModule.forRoot({
             stateKey: 'router'
@@ -88,6 +91,7 @@ export function jwtOptionsFactory(tokenService: AuthService) {
         AuthGuard,
         UserService,
         WeatherService,
+        LoginService,
         AuthService,
         {
             provide: RouterStateSerializer,

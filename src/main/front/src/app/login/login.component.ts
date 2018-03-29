@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {routerTransition} from '../router.animations';
+import {Observable} from "rxjs/Observable";
+import {Credentials} from "../shared";
+import {ApplicationState} from "../store/appication-state";
+import {select, Store} from "@ngrx/store";
+import {LoginUserAction} from "../store/actions";
 
 @Component({
     selector: 'app-login',
@@ -9,13 +13,16 @@ import {routerTransition} from '../router.animations';
     animations: [routerTransition()]
 })
 export class LoginComponent implements OnInit {
-    constructor(public router: Router) {
+    credentials$: Observable<Credentials>;
+
+    constructor(private _store: Store<ApplicationState>) {
+        this.credentials$ = this._store.pipe(select(state => state.authState.credentials))
     }
 
     ngOnInit() {
     }
 
-    onLoggedin() {
-        localStorage.setItem('isLoggedin', 'true');
+    login(credentials: Credentials) {
+        this._store.dispatch(new LoginUserAction(credentials))
     }
 }
