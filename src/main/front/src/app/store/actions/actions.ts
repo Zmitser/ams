@@ -163,7 +163,7 @@ export class LoginUserAction implements ActionWithPayload<Credentials> {
 }
 
 export class LoginUserActionSuccess implements ActionWithPayload<boolean> {
-    type: string = LOGIN_USER_ACTION;
+    type: string = LOGIN_USER_ACTION_SUCCESS;
 
     constructor(public payload: boolean) {
 

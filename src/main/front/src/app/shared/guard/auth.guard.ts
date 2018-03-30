@@ -2,22 +2,16 @@ import {Injectable} from '@angular/core';
 import {CanActivate} from '@angular/router';
 import {ApplicationState} from "../../store/appication-state";
 import {Store} from "@ngrx/store";
-import {Go} from "../../store/actions/actions";
+import {AuthService} from "../services/auth.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private _store: Store<ApplicationState>) {
-    }
-    canActivate() {
-        if (localStorage.getItem('authenticationToken')) {
-            return true;
-        }
+    isLogged: boolean = true;
 
-        this._store.dispatch(new Go({
-            path: ['/login'],
-            query: {},
-            extras: {}
-        }));
-        return false;
+    constructor(private _authService: AuthService, private _store: Store<ApplicationState>) {
+    }
+
+    canActivate() {
+        return this.isLogged
     }
 }

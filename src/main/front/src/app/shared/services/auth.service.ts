@@ -16,6 +16,7 @@ export class AuthService {
 
 
     getToken(): Observable<string> {
+
         return this._localStorage.getItem('authenticationToken')
     }
 
@@ -30,7 +31,7 @@ export class AuthService {
     }
 
     storeAuthToken(authToken: String): Observable<boolean> {
-        return this._localStorage.setItem('authenticationToken', authToken)
+        return this._localStorage.setItem("authenticationToken", authToken)
     }
 
     logout(): Observable<boolean> {

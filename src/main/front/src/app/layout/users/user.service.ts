@@ -3,13 +3,16 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {User} from "../../shared/models/user";
 import "rxjs/add/observable/of";
+import "rxjs/add/operator/switchMap";
+import "rxjs/add/operator/map";
 import {ServerDataSource} from "ng2-smart-table";
 import {Http} from '@angular/http';
 
 @Injectable()
 export class UserService {
 
-    constructor(private _httpClient: HttpClient, private _http: Http) {
+    constructor(private _httpClient: HttpClient,
+                private _http: Http) {
 
     }
 

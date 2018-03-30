@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
@@ -20,14 +20,15 @@ import {RouterStateSerializer, StoreRouterConnectingModule} from "@ngrx/router-s
 import {CustomSerializer} from "./store/custom-serializer";
 import {RouterServiceEffects} from "./store/effects/router-service-effects";
 import {ToastModule, ToastOptions} from "ng2-toastr";
-import {HttpModule} from "@angular/http";
+import {HttpModule, RequestOptions} from "@angular/http";
 import {WeatherService} from "./layout/weather/weather.service";
 import {WeatherServiceEffects} from "./store/effects/weather-service-effects";
 import {AsyncLocalStorageModule} from "angular-async-local-storage";
-import {JWT_OPTIONS, JwtModule} from "@auth0/angular-jwt";
 import {AuthService} from "./shared/services/auth.service";
 import {LoginServiceEffects} from "./store/effects/login-service-effects";
 import {LoginService} from "./login/login.service";
+import {TokenInterceptor} from "./shared/interceptors/token.interceptor";
+import {TokenRequestOptions} from "./shared/interceptors/token.request.options";
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -40,13 +41,6 @@ export class CustomOption extends ToastOptions {
     positionClass = 'toast-bottom-right'
 }
 
-export function jwtOptionsFactory(tokenService: AuthService) {
-    return {
-        tokenGetter: () => {
-            return tokenService.getToken();
-        }
-    }
-}
 
 @NgModule({
     imports: [
@@ -78,13 +72,6 @@ export function jwtOptionsFactory(tokenService: AuthService) {
         StoreDevtoolsModule.instrument(),
         HttpModule,
         AsyncLocalStorageModule,
-        JwtModule.forRoot({
-            jwtOptionsProvider: {
-                provide: JWT_OPTIONS,
-                useFactory: jwtOptionsFactory,
-                deps: [AuthService]
-            }
-        })
     ],
     declarations: [AppComponent],
     providers: [
@@ -101,6 +88,21 @@ export function jwtOptionsFactory(tokenService: AuthService) {
             provide: ToastOptions,
             useClass: CustomOption
         },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptor,
+            multi: true,
+            deps: [
+                AuthService
+            ]
+        },
+        {
+            provide: RequestOptions,
+            useClass: TokenRequestOptions,
+            deps: [
+                AuthService
+            ]
+        }
     ],
     bootstrap: [AppComponent]
 })

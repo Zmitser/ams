@@ -64,7 +64,7 @@ class SecurityModuleConfiguration(val corsFilter: CorsFilter,
                 .pathMatchers("/api/v1/account/reset-password/init").permitAll()
                 .pathMatchers("/api/v1/account/reset-password/finish").permitAll()
                 .pathMatchers("/api/v1/profile-info").permitAll()
-                .pathMatchers("/api/v1/users").authenticated()
+                .anyExchange().authenticated()
                 .and()
                 .build()
     }

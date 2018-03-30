@@ -4,6 +4,8 @@ export class Credentials {
 
 
     constructor() {
+        this.password = null;
+        this.username = null
     }
 
 }
